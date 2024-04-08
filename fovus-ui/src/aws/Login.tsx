@@ -21,10 +21,10 @@ const userPool = new CognitoUserPool({
 });
 
 export const Login: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [emailError, setEmailError] = useState<string>("");
+  const [passwordError, setPasswordError] = useState<string>("");
 
   const navigate = useNavigate();
 
@@ -59,14 +59,15 @@ export const Login: React.FC = () => {
       Pool: userPool,
     });
 
-    const authenticationDetails = new AuthenticationDetails({
+    const authenticationDetails : AuthenticationDetails = new AuthenticationDetails({
       Username: email,
       Password: password,
     });
 
+    // User Authentication with cognito user pool
     cognitoUser.authenticateUser(authenticationDetails, {
       onSuccess: (result: CognitoUserSession) => {
-        console.log(result);
+        // console.log(result);
 
         const accessToken: string = result.getAccessToken().getJwtToken();
         const idToken: string = result.getIdToken().getJwtToken();
@@ -83,6 +84,7 @@ export const Login: React.FC = () => {
         console.log("login failed", err);
       },
       newPasswordRequired: function (userAttributes, requiredAttributes) {
+        //TO DO: In Future
         console.log(userAttributes, requiredAttributes);
       },
     });

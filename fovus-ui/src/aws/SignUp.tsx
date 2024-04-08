@@ -16,10 +16,10 @@ const userPool: CognitoUserPool = new CognitoUserPool({
 
 export const SignUp: React.FC = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [emailError, setEmailError] = useState<string>("");
+  const [passwordError, setPasswordError] = useState<string>("");
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -57,19 +57,14 @@ export const SignUp: React.FC = () => {
 
       await schema.validate({ email, password }, { abortEarly: false });
 
-      // If validation passes, you can proceed with signup logic
-      console.log(
-        "Signup submitted with email:",
-        email,
-        "and password:",
-        password
-      );
+
       const attributeList = [
         new CognitoUserAttribute({
           Name: "email",
           Value: email,
         }),
       ];
+      // user signup with Cognito User Pool
       userPool.signUp(
         email,
         password,

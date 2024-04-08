@@ -25,8 +25,8 @@ export const Upload: React.FC = () => {
   const [fileInput, setFileInput] = useState<File | null>(null);
   const [textError, setTextError] = useState<string>("");
   const [fileError, setFileError] = useState<string>("");
+  const [fileContentstate, setFileContentstate] = useState<string>("");
 
-  const [fileContentstate, setFileContentstate] = useState("");
   const navigate = useNavigate();
 
   const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,6 +78,8 @@ export const Upload: React.FC = () => {
           [COGNITO_ID]: sessionStorage.getItem(FOVUS_IDTOKEN)!,
         };
 
+        // Exchanging id_token for AWS Temporary Credentiols with Cognito Identity Pool
+        // It directly send objects to S3 bucket NO API Gateway, Lambda, EC2 or anything
         const s3Client = new S3Client({
           region: REGION,
           credentials: fromCognitoIdentityPool({
@@ -86,6 +88,8 @@ export const Upload: React.FC = () => {
             logins: loginData,
           }),
         });
+
+        // Choose Bucket Name of your choice
         const command_s3 = new PutObjectCommand({
           Bucket: "fovus-input",
           Key: fileInput.name,
@@ -93,9 +97,9 @@ export const Upload: React.FC = () => {
         });
 
         const response_s3 = await s3Client.send(command_s3);
-        console.log("response_s3" + response_s3);
+        // console.log("response_s3" + response_s3);
 
-        // Send the POST request
+        // Send the POST request to API Gateway with id_token received from cognito user pool
         const authToken = sessionStorage.getItem(FOVUS_IDTOKEN);
         const response_api = await axios.post(
           `https://cpvyyndojk.execute-api.us-east-2.amazonaws.com/v1/fovus-lambda?inputText=${textInput}&inputFileName=${fileInput.name}`,
@@ -117,9 +121,9 @@ export const Upload: React.FC = () => {
     ApiCall();
   };
 
+  // User Logout Flow
   const handleLogout = () => {
     const cognitoUser = userPool.getCurrentUser();
-    console.log(cognitoUser);
     if (cognitoUser != null) {
       sessionStorage.removeItem(FOVUS_IDTOKEN);
       sessionStorage.removeItem(FOVUS_ACCESSTOKEN);
@@ -152,45 +156,24 @@ export const Upload: React.FC = () => {
             {textError}
           </Alert>
         )}
-        {/* <label htmlFor="textInput">Text Input:</label>
-        <input
-          type="text"
-          id="textInput"
-          value={textInput}
-          onChange={handleTextChange}
-          className={textError ? "error" : ""}
-        /> */}
-        {/* {textError && <div className="error-message">{textError}</div>} */}
       </div>
       <div>
         <div>
           <div className="mb-2 block">
             <Label htmlFor="fileInput" value="Upload file" />
           </div>
-          <FileInput id="fileInput"
-          onChange={handleFileChange}
-          accept=".txt"/>
+          <FileInput id="fileInput" onChange={handleFileChange} accept=".txt" />
         </div>
-        {/* <label htmlFor="fileInput">File Input:</label>
-        <input
-          type="file"
-          id="fileInput"
-          onChange={handleFileChange}
-          accept=".txt"
-          className={fileError ? "error" : ""}
-        /> */}
         {fileError != "" && (
-            <Alert color="failure" icon={HiInformationCircle}>
-              {fileError}
-            </Alert>
-          )}
-        {/* {fileError && <div className="error-message">{fileError}</div>} */}
+          <Alert color="failure" icon={HiInformationCircle}>
+            {fileError}
+          </Alert>
+        )}
       </div>
       <div>
-        {/* <button onClick={handleSubmit}>Submit</button> */}
-        <Button  className="w-full mt-6" onClick={handleSubmit}>
-        Submit
-      </Button>
+        <Button className="w-full mt-6" onClick={handleSubmit}>
+          Submit
+        </Button>
       </div>
     </div>
   );

@@ -12,6 +12,8 @@ import { SignUp } from "./aws/SignUp";
 import { Upload } from "./aws/Upload";
 import { FOVUS_AUTHENTICATED, FOVUS_IDTOKEN } from "./aws/session.const";
 
+
+// Private route for components which require authentication Public route for components which does not require quthentication.
 export const App: React.FC = () => {
   return (
     <div className="w-screen h-screen flex">

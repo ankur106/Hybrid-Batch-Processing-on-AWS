@@ -22,11 +22,15 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
             TableName : 'fovus-input',
             Item : obj
         });
-    
+        
+        // Setting up entry in dynamodb
         const res = await docClient.send(command);
 
         const body = JSON.stringify(res);
         const statusCode = 200;
+
+        // Setting CORS error so that no cors error occur on ui
+        // As for API Gateway we have lambda integgration only this solution worked for the error.
         const headers = {
           'Content-Type': 'application/json',
           "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,X-Amz-Security-Token,Authorization,X-Api-Key,X-Requested-With,Accept,Access-Control-Allow-Methods,Access-Control-Allow-Origin,Access-Control-Allow-Headers",
