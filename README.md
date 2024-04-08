@@ -31,7 +31,6 @@ It starts and initiates instance with user data script which fetched script from
 The Script in S3 fetched file from fovus-input, appends input_text send by user via UI, puts output file in fovus-output S3 bucket, puts entry in dynamodb table fovus-output, and terminates instance after execution is complete. 
 
 ## How to Setup
-*For detailed configuration see videos under Demo and Configuration Videos*
 
 
 ## AWS Used Resources Info
@@ -56,7 +55,8 @@ The Script in S3 fetched file from fovus-input, appends input_text send by user 
 8. Cloudwatch
     - To See logs from lambda execution
 
-## Demo and Configuration Videos
+## Demo Video
+**See the demo video in Videos folder**
 
 ## Resources Used
  1. AWS SDK for JavaScript
