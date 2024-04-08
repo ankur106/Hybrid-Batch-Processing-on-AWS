@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+ /* eslint-disable prettier/prettier */
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { DynamoDBClient, } from "@aws-sdk/client-dynamodb";
 import { PutCommand, DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
@@ -29,7 +29,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
         const body = JSON.stringify(res);
         const statusCode = 200;
 
-        // Setting CORS error so that no cors error occur on ui
+        // Setting CORS error so that no cors error occur on ui while testing on different origin
         // As for API Gateway we have lambda integgration only this solution worked for the error.
         const headers = {
           'Content-Type': 'application/json',
