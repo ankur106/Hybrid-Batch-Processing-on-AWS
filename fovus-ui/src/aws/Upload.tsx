@@ -136,8 +136,8 @@ export const Upload: React.FC = () => {
 
   return (
     <div className="content-center w-full max-w-md border-2 border-slate-300 border-solid rounded p-10 m-auto">
-      <Button className="absolute top-4 right-4" color="grey" pill>
-        <RiLogoutCircleFill onClick={handleLogout} className="mr-2 h-5 w-5 " />
+      <Button className="absolute top-4 right-4" color="grey" pill onClick={handleLogout}>
+        <RiLogoutCircleFill  className="mr-2 h-5 w-5 " />
         Logout
       </Button>
       <h2 className="mb-6 text-center">Upload Component</h2>
